@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>제목</th>
+        <th>내용</th>
+      </tr>
+    </table>
+    <script>
+      const BACKEND_URL = "https://123.coms/";
+      const errorHandle = async (message, status) => {
+        switch (status) {
+          case 404:
+            alert("페이지를 찾을 수 없습니다");
+            location.href = "./404.html";
+        }
+      };
+      const loadPosts = async () => {
+        try {
+          //   const result = await axios(BACKEND_URL, {
+          //     method: "GET",
+          //   });
+          const result = await axios.get(BACKEND_URL);
+          // axios.get > 앞에 메소드를 붙혀놓기만 하면 method : "GET"을 안쓰고 줄일 수 있음
+          // axios 자체는 promise이지만 반환 형태가 promise가 아니고, json파싱을 해줄 필요가 없다.
+
+          //   console.log(result);
+          const ten_result = result.data.slice(0, 10);
+          // 백엔드가 준 데이터 형태에 따라 결과 데이터 형태가 다르다.
+
+          const $table = document.querySelector("table");
+
+          // 1)
+          const posts = ten_result
+            .map(
+              (post) =>
+                `<tr>
+                <td>${post.title}</td>
+                <td>${post.body}</td>
+            </tr>`
+            )
+            .join("");
+          console.log(posts);
+          //   $table.append(posts); // 기존 innerHTML 을 그대로 남겨두고 이어서 추가
+          $table.insertAdjacentHTML("beforeend", posts);
+
+          //2)
+          $table.innerHTML += posts;
+
+          //3)
+          for (let post of ten_result) {
+            const tr = document.createElement("tr"); // <tr></tr>
+            tr.innerHTML = `
+                <td>${post.title}</td>
+                <td>${psot.body}</td>
+            `;
+            $table.append(tr);
+            // append 사용가능 , 매개변수에는 element가 들어가야만함
+            // 그러나 위의 posts는 string
+          }
+        } catch (err) {
+          console.log(err);
+          errorHandle(err.message, err.response.status);
+          // 디버깅 용도로 많이 사용할 수 있다.
+        }
+      };
+      loadPosts();
+
+      /*
+      axios -> backendUrl request -> response
+      axios config / dev tools network tab -- debug
+      */
+    </script>
+  </body>
+</html>

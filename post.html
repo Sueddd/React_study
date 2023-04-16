@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>상세보기</h2>
+    <div id="title"></div>
+    <div id="content"></div>
+
+    <table>
+      <tr>
+        <th>이메일</th>
+        <th>내용</th>
+      </tr>
+    </table>
+
+    <script>
+      // 리스트 페이지 location.href = `/detail.html?postidx = ${postIdx}&userIdx=${suerId}`
+      // ?(부가정보시작) & (and)
+      // 쿼리스트링은 주소에 영향을 끼치지 않으며 일종의 부가정보로만 사용
+
+      const searchParams = new URLSearchParams(location.seach);
+      // 현재 주소에 있는 주소를 꺼내올 수 있는..?
+      const postId = searchParams.get("postId");
+      console.log(postId);
+
+      const BACKEND_URL = "https://jsonplaceholder.typicode.com";
+
+      axios
+        .get(BACKEND_URL + `/posts/${postId}`)
+        .then((res) => console.log(res));
+      axios
+        .get(BACKEND_URL + `/comments?postId=${postId}`)
+        .then((res) => console.log(res));
+      // 게시판 구현하기 : 과제
+    </script>
+  </body>
+</html>
