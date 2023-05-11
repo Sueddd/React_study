@@ -1,0 +1,38 @@
+
+
+최종 목표 : 
+input 창의 값이 upload 버튼을 누르면 본문에 추가될 수 있게
+부가 조건은 ? 
+초기값이 유지되는 상태(['김민수','홍길동'])에서 
+계속해서 값이 추가되는 태그를 만들면 되는 것이다. 
+
+1) 초기값 설정 
+    const [names, setNames] = useState(['홍길동','김민수']);
+
+2) return 기본 형태 만들기 (이벤트 함수 들어가기 전)
+
+return (
+    <div>
+        <input type = "text" value = {input} onChange= {ll}/>
+        <button>
+        {names.map((name, idx) => {
+            <p key = {idx}>name</p>
+        })}
+    </div>
+)
+
+3) 추가될 값을 state로 만들어주기 
+    const [input, setInput] = useState('');
+
+4) 함수 만들어 보기 
+    여기서 필요한 함수는 2개 
+    click 이벤트를 줬을 때, 그리고 onChange 이벤트를 줬을 때 
+    // onClick => 기존의 setNames에 input이라는 새로운 값을 추가해주는 과정 
+    const addSetstate(prev) => {
+        return [input, ...prev]
+    }
+
+    // onChange => input이라는 state 값을 형성하는 과정
+    const addSetinput(e) => {
+        setInput(e.target.value);
+    }

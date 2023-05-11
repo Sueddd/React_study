@@ -1,0 +1,82 @@
+(1) Memoization
+    - 메모이제이션이란 어떠한 자주 사용되는 값을 받아오기 위해
+      반복적으로 계산을 해야된다면 이전에 이미 계산한 값을 캐싱해 둠으로 
+      해당 값이 필요할 때마다 반복적으로 계산하는 것이 아니라 
+      메모리에서 꺼내서 사용하는 최적화 기법이다. 
+
+    (1-1) useMemo
+          useMemo(() => {
+            return value;
+          }, [item])
+    - useMemo는 자주 쓰이는 값을 캐싱 / 필요할 때마다 캐싱해둔 값을 메모리에서
+      꺼내와서 재사용한다. 필요할 때마다 다시 값을 계산을 하는 것이 아님 
+    - 콜백함수를 넣어주면 이 함수가 리턴하는 값을 메모이제이션 해준다. 
+
+(2) useCallback이란?
+    
+    useCallback(() => {
+        return value;
+    }, [item])
+    
+    - 콜백함수 그 자체를 메모이제이션 하는 것이다. 
+    
+    const cacluate = useCallback((num) => {
+        return num + 1;
+    }, [item])
+
+    - cacluate 함수를 메모이제이션 해준다면 
+      useCallback으로 이 함수를 감싸주면 된다.  
+    
+    - 함수를 새로 생성하는 것이 아니라, 필요할 때마다 가져와 주는 것이다. 
+
+(3) Javascript의 함수 
+
+    cacluate라는 함수가 있다고 가정해보자. 
+    const cacluate = (num) => {
+        return num + 1
+    };
+    cacluate라는 변수에 함수객체가 할당되는 것이다. 
+
+(4) 함수형 컴포넌트 
+    
+    function Component() {
+        const cacluate = (num) => {
+            return num + 1
+        };
+        return <div> {value} </div>
+    }
+    리액트에서 함수형 컴포넌트는 말그대로 함수이다. 
+    함수형 컴포넌트가 랜더링이 된다는 건 컴포넌트 함수가 호출이 되는 것이다. 
+    그럼, 컴포넌트 내부의 모든 변수가 초기화 된다. 
+
+    4-1) 위 4번의 함수형 컴포넌트가 실행될 때마다 cacluate 변수에는 계속해서
+         새로운 값을 할당받게 된다.
+
+    4-2) 만약, cacluate함수를 useCallback 속으로 감싸서 
+         메모이제이션 해주면 컴포넌트가 계속 랜더링 되더라도 
+         cacluate가 초기화 되는 것을 막을 수 있다.
+
+         function Component() {
+             const cacluate = useCallback((num) => {
+                 return num + 1
+             },[item]);
+             return <div> {value} </div>
+         }
+        
+         컴포넌트가 맨 처음 랜더링 될때만 cacluate 함수 객체를 만들어
+         초기화 해주고 이후에 랜더링이 될 때는 새로운 값을 할당받지 않고 
+         기존의 값에 계속해서 할당받는다. 
+
+(5) ※ 그래서 useCallback이 무엇인가? useCallback의 구성
+    const cacluate = useCallback(() => {
+        return value;
+    },[item])
+
+    첫번째 인자는 메모이제이션 해줄 콜백함수, 
+    두번째 인자는 의존성 배열
+
+    cacluate라는 변수는 메모이제이션 된 함수를 갖게 된다.
+    이 함수는 의존성 배열의 내부의 값이 변경되지 않는 이상 초기화되지 않는다. 
+    배열이 변경된다면 새로 만들어진 함수로 초기화 될 것이다. 
+
+    

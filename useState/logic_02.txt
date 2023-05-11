@@ -1,0 +1,47 @@
+
+
+
+우선 최종 목표가 무엇인가?
+input 창의 값이 upload 버튼을 누르면 본문에 추가된다.
+부가조건은?
+[홍길동, 김민수]라는 태그가 먼저 나와있다. 그니까
+초기값이 유지되는 상태에서~ 계속해서 값이 추가되는 태그를 만들면 되는 것이다. 
+
+1) 우선, 이건 state 함수인데, 왜 state를 이용해야 하는가?
+let이 아닌 state를 이용하는 이유가 있는가? 일반 변수 let을 이용해서도 시도해보기 
+
+2) return에는 div 태그와 button 태그를 받아준다.
+button을 클릭하면 onClick = {addSetstate} 뭐 이런식으로..?
+
+3) 초기값 설정
+   const [names, setNames] = useState(['홍길동','김민수']);
+   
+
+4) 함수 만들기 (addSetstate)
+
+5) return 값을 제대로 만들기   
+    근데 내가 여기서 onChange를 안줘? 
+    그러면 .. 어떻게 될까.. 그러면 input의 value값을 못받겠지..
+    그러면? 애초에 버튼을 눌러도 넘어가지 않겠지. 
+    그럼. 만약 내가 입력한 값이 그냥 바로 value라고 받을 수는 없나? (이건 나중에)
+    return (
+        <div>  
+            <input type = "text" value = names onChange = {ldf;ald}/>
+            <button onClick = {addSetstate}>Upload</button>
+            {names.map((name, idx) => {
+                return <p key = {idx} >name</p>
+            })}
+        </div>
+    )
+
+6) setNames에 추가를 하는 건데
+    기존의 초기값에 추가를 하는건데? push를 쓰는 것도 애매하고.. 
+    이럴 때는 prev라는 state의 이전 값을 나타내는 props?를 써주기 
+    콜백함수 형태로 줄 수 있다. 
+
+    setNames((prev) => {
+        return [names, ...prev]
+    }) 
+
+7) 새로 업데이트를 시켜줄 state도 필요하다 **
+    이게 이 문제의 핵심! 

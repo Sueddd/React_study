@@ -1,0 +1,68 @@
+컴포넌트 최적화를 위한 훅함수 2가지 
+    => useMemo, useCallback
+
+(1) useMemo란?
+    Memo는 Memoization을 뜻한다. 
+
+    여기서 Memoization이란,
+    동일한 값을 리턴하는 함수를 반복적으로 호출해야 된다면 
+    맨 처음 값을 계산 할 때 해당 값을 메모리에 저장해서 
+    필요할 때마다 또다시 계산하지 않고 메모리에서 꺼내서 재사용하는 기법이다. 
+
+    즉, 자주 필요한 값을 맨처음 계산할 때 캐싱을 해둬서 그 값을 사용할 때마다  
+        꺼내서 사용하는 것 
+
+(2) 함수형 컴포넌트 
+                                                      렌더링 
+    function Component(){                |              ▽
+        const value = calculate();       |       component함수 호출 
+        return <div> {value} </div>      |              ▽
+    }                                    |      모든 내부 변수 초기화
+
+    function calculate(){
+        return 10
+    }                                         
+    
+    대부분의 react component는 state와 props의 변화로 인해 수많은 렌더링을 거친다
+    component가 렌더링이 될때마다 value라는 변수가 초기화되기 때문에 
+    calculate함수는 반복적으로 호출될 것이다. 
+
+    만약 calculate함수가 무거운 일을 하는 함수라면 굉장히 비효율적일 것이다. 
+    왜냐하면 calculate함수가 무의미한 계산을 반복적으로 하고, 
+    value라는 변수에 값을 할당하기 때문이다
+
+(3) ★useMemo를 사용해서 Memoization을 해주면 이런 상황을 간편하게 해결할 수 있다.
+    
+    function Component() {                 |                   렌더링      
+        const value = useMemo (            |                     ▽
+            () => calculate(), []          |         component 함수 호출 (Memoization)
+        )                                  |                     ▽
+        return <div> {value} </div>        |                   렌더링  
+    }                                      |                     ▽
+                                           |     component 함수 호출, Memoize 된 값을 재사용
+
+    useMemo는 처음에 계산된 결과값을 메모리에 저장해서 
+    컴포넌트가 반복적으로 렌더링이 되어도 
+    계속 calculate를 다시 호출하지 않고 이전에 이미 계산된 결과값을 
+    메모리에서 꺼내와서 재사용할 수 있게 해준다. 
+
+(4) useMemo의 구조 
+
+    const value = useMemo(() =>{
+        return calculate();
+    },[item])
+
+    첫번째 인자로는 callback 함수를 받고, 두번째 인자로는 배열을 받는다
+    
+    첫번째 인자인 콜백함수는 Memoization해줄 값을 계산해서 리턴해주는 함수이다. 
+    이 콜백함수가 리턴하는 값이 바로 useMemo가 리턴하는 값이 된다. 
+
+    두번째 인자인 배열은 의존성 배열이라고도 불린다. 
+    useMemo는 배열 안의 요소의 값이 업데이트 될때만 콜백함수를 다시 호출해서 
+    Memoization된 값을 업데이트해서 다시 Memoization을 해준다. 
+    만약에 빈 배열을 넘겨주면 맨처음 컴포넌트가 mount 되었을 때만 값을 계산하고
+    이후에는 항상 Memoization된 값을 꺼내와서 사용한다. 
+
+(5) useMemo의 잘못된 남용
+    불필요한 값까지 모두 Memoization을 하면 오히려 성능이 악화될 수 있다.
+
