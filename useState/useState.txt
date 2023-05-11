@@ -1,0 +1,19 @@
+※ useState 훅은 state와 setState를 배열 형태로 리턴해 준다.
+    - const[state, setState] = useState(초기값);
+    - state에는 현재 상태가 들어도 setState함수로 state 변경이 가능
+    - setState를 사용해서 변경할 때마다 컴포넌트는 재랜더링이 된다
+
+
+※ state를 변경할 때 새로 변경할 state가 이전의 state와 연관이 있다면?
+    setState((prevState) => {
+        return newState;
+    })
+    - setState인자로 새로운 state를 리턴하는 콜백함수를 넣어주는 게 좋다
+    
+
+※ useState를 사용해서 초기값을 받아올 때 무거운 일을 해야한다면
+    useState(() => {
+        return heavyWorks();
+    })
+    - useState인자로 콜백함수를 넣어주면 맨처음 랜더링이 될 때만 
+      실행되게 할 수 있다. 
