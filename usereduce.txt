@@ -1,0 +1,24 @@
+장부  <-->  회계직원 <-->  창구직원    <----------- 주문    고객
+state        reducer        dispatch                action  event
+
+function countReducer(oldCount, action){
+    if(action ==="up){
+        return oldCount + 1;
+    } else if (action === "DOWN"){
+        return oldCount - 1;
+    }else if (action === "RESET"){
+        return 0;
+    }
+}
+
+const [count, countDispatch] = useReduer(countReducer, 0);
+
+function down(){
+    countDispatch('down')
+}
+function reset(){
+    countDispatch('reset')
+}
+function up(){
+    countDispatch('up');
+}
