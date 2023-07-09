@@ -1,6 +1,6 @@
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { changeName } from "../../store";
+import { changeCount, changeName } from "../../store";
 
 function Cart() {
   // redux를 사용하면 컴포넌트들이 props 없이 state 공유가능
@@ -17,7 +17,16 @@ function Cart() {
 
   return (
     <div>
-      {state.user}의 장바구니
+      <h6>
+        {state.user.name} {state.user.age}의 장바구니
+      </h6>
+      <button
+        onClick={() => {
+          dispatch(changeName());
+        }}
+      >
+        버튼
+      </button>
       <Table>
         <thead>
           <tr>
@@ -37,7 +46,7 @@ function Cart() {
                 <button
                   onClick={() => {
                     // 4. dispatch(state변경함수()) 이렇게 사용해야 한다.
-                    dispatch(changeName());
+                    dispatch(changeCount());
                   }}
                 >
                   +
